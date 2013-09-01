@@ -2,13 +2,34 @@ require 'csv'
 
 class GradeReader
   def self.read_file(file_name)
+    if !valid_file?(file_name)
+      puts "Invalid file: #{file_name}"
+      exit
+    end
     mycsv = CSV.read(file_name, headers: true)
     return_data = {}
     mycsv["Student"].each_with_index do |student, index|
       grades_array = mycsv["Grades"][index].split(" ").map { |str| str.to_i }
       return_data[student] = grades_array
     end
+    if !valid_data?(return_data)
+      puts "Invalid data: #{file_name}"
+      exit
+    end
     return_data
+  end
+
+  def self.valid_file?(file_name)
+    return false if !File.exist?(file_name)
+    File.extname(file_name) == ".csv"
+  end
+
+  def self.valid_data?(student_grades)
+    first_size = student_grades.first[1].size
+    student_grades.each_value do |grades|
+      return false if grades.size != first_size
+    end
+    return true
   end
 end
 #############################################################################
@@ -121,7 +142,10 @@ def teach_write(students, file_name)
 
 end
 
-student_grades = GradeReader.read_file("grades.csv")
+puts "What file do you want to read?"
+file_name = gets.chomp
+
+student_grades = GradeReader.read_file(file_name)
 
 puts "Printing Student Grades: "
 student_grades.each do |student, grades|
