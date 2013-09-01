@@ -45,15 +45,20 @@ end
 # an object that represents a participant in a class
 #############################################################################
 class Student
-  attr_reader :name
-  def initialize(name, grades)
-    @name = name 
+  attr_reader :first_name, :last_name
+  def initialize(first_name, last_name, grades)
+    @first_name = first_name
+    @last_name = last_name
     @grades = grades   
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 
   def average_grade
     return 0 if @grades.size == 0
-    @grades.inject(0) { |sum, grade| sum += grade } / @grades.size
+    (@grades.inject(0) { |sum, grade| sum += grade } / @grades.size.to_f).round(1)
   end
 
   def letter_grade
@@ -79,19 +84,21 @@ puts
 puts
 
 students = []
-student_grades.each do |student, grades|
-  students << Student.new(student, grades)
+student_grades.each do |full_name, grades|
+  first_name = full_name.split(" ")[0]
+  last_name = full_name.split(" ")[1]
+  students << Student.new(first_name, last_name, grades)
 end
 
 students.each do |student| 
-  puts "#{student.name}'s Average Grade is: #{student.average_grade}"
+  puts "#{student.full_name}'s Average Grade is: #{student.average_grade}"
 end
 
 puts
 puts
 
 students.each do |student| 
-  puts "#{student.name}'s Average Grade is: #{student.letter_grade}"
+  puts "#{student.full_name}'s Average Grade is: #{student.letter_grade}"
 end
 
 puts
