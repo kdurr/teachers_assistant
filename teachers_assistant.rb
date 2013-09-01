@@ -61,11 +61,45 @@ class Student
   def letter_grade
     FinalGrade.letter_grade(average_grade)
   end
+
+  def minimum
+    @grades.min { |left, right| left <=> right }
+  end
+
+  def maximum
+    @grades.max { |left, right| left <=> right }
+  end
+
 end
 #############################################################################
 # an object that encapsulates the concept of the class' aggregate performance
 #############################################################################
 class GradeSummary
+  class << self
+
+    def average_score(students)
+      return 0 if students.size == 0
+      students.inject(0) { |sum, student| sum += student.average_grade } / students.size
+    end
+
+    def minimum_score(students)
+      (students.min { |left, right| left.minimum <=> right.minimum }).minimum
+    end
+
+    def maximum_score(students)
+      (students.max { |left, right| left.maximum <=> right.maximum }).maximum
+    end
+
+    def standard_deviation(students)
+      return 0 if students.size == 0
+      class_average = average_score(students)
+      averages_squared = students.inject(0) do |sum, student| 
+        sum += (student.average_grade - class_average)**2
+      end
+      Math::sqrt(averages_squared / students.size)
+    end
+
+  end
 end
 
 def teach_write(students, file_name)
@@ -121,3 +155,9 @@ puts
 puts
 
 teach_write(students, "report_card.csv")
+
+puts GradeSummary.average_score(students)
+puts GradeSummary.maximum_score(students)
+puts GradeSummary.minimum_score(students)
+puts GradeSummary.standard_deviation(students)
+
