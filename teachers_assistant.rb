@@ -10,5 +10,6 @@ class GradeReader
     end
     return_data
   end
-
 end
+
+puts GradeReader.read_file("grades.csv")
