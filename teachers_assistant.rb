@@ -60,3 +60,18 @@ end
 
 puts
 puts
+
+students = []
+student_grades.each do |student, grades|
+  students << Student.new(student, grades)
+end
+
+students.each do |student| 
+  puts "#{student.name}'s Average Grade is: #{student.average_grade}"
+end
+
+puts
+puts
+
+
+
