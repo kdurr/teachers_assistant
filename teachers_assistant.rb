@@ -26,6 +26,19 @@ end
 # an object that encapsulates the concept of a student's final grade
 #############################################################################
 class FinalGrade
+  def self.letter_grade(grade)
+    if grade >= 90
+      'A'
+    elsif grade >= 80
+      'B'
+    elsif grade >= 70
+      'C'
+    elsif grade >= 60
+      'D'
+    else
+      'F'
+    end
+  end
 end
 
 #############################################################################
@@ -41,6 +54,10 @@ class Student
   def average_grade
     return 0 if @grades.size == 0
     @grades.inject(0) { |sum, grade| sum += grade } / @grades.size
+  end
+
+  def letter_grade
+    FinalGrade.letter_grade(average_grade)
   end
 end
 #############################################################################
@@ -73,5 +90,9 @@ end
 puts
 puts
 
+students.each do |student| 
+  puts "#{student.name}'s Average Grade is: #{student.letter_grade}"
+end
 
-
+puts
+puts
