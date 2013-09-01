@@ -12,6 +12,43 @@ class GradeReader
   end
 end
 
+#############################################################################
+# an object that encapsulates the concept of a given assignment grade
+#############################################################################
+class AssignmentGrade
+  attr_reader :grade
+  def initialize(grade)
+    @grade = grade
+  end
+end
+
+#############################################################################
+# an object that encapsulates the concept of a student's final grade
+#############################################################################
+class FinalGrade
+end
+
+#############################################################################
+# an object that represents a participant in a class
+#############################################################################
+class Student
+  attr_reader :name
+  def initialize(name, grades)
+    @name = name 
+    @grades = grades   
+  end
+
+  def average_grade
+    return 0 if @grades.size == 0
+    @grades.inject(0) { |sum, grade| sum += grade } / @grades.size
+  end
+end
+#############################################################################
+# an object that encapsulates the concept of the class' aggregate performance
+#############################################################################
+class GradeSummary
+end
+
 student_grades = GradeReader.read_file("grades.csv")
 
 puts "Printing Student grades: "
