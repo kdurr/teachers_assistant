@@ -11,7 +11,6 @@ class GradeReader
     return_data
   end
 end
-
 #############################################################################
 # an object that encapsulates the concept of a given assignment grade
 #############################################################################
@@ -21,7 +20,6 @@ class AssignmentGrade
     @grade = grade
   end
 end
-
 #############################################################################
 # an object that encapsulates the concept of a student's final grade
 #############################################################################
@@ -40,7 +38,6 @@ class FinalGrade
     end
   end
 end
-
 #############################################################################
 # an object that represents a participant in a class
 #############################################################################
@@ -71,9 +68,28 @@ end
 class GradeSummary
 end
 
+def teach_write(students, file_name)
+
+  sorted_students = students.sort do |left, right|
+    if left.last_name == right.last_name
+      left.first_name <=> right.first_name
+    else
+      left.last_name <=> right.last_name
+    end
+  end
+
+  CSV.open(file_name, "wb") do |csv|
+    csv << ["Student", "Average Grade", "Letter Grade"]
+    sorted_students.each do |student|
+      csv << [student.full_name, student.average_grade, student.letter_grade]
+    end
+  end
+
+end
+
 student_grades = GradeReader.read_file("grades.csv")
 
-puts "Printing Student grades: "
+puts "Printing Student Grades: "
 student_grades.each do |student, grades|
   print "#{student}: "
   grades.each { |grade| print "#{grade} " }
@@ -103,3 +119,5 @@ end
 
 puts
 puts
+
+teach_write(students, "report_card.csv")
