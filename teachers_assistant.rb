@@ -1,22 +1,33 @@
 require 'csv'
 
 class GradeReader
+
+  # read_file
+  # returns a hash = { student_name: [ grades ] }
   def self.read_file(file_name)
+
     if !valid_file?(file_name)
       puts "Invalid file: #{file_name}"
       exit
     end
+
     mycsv = CSV.read(file_name, headers: true)
     return_data = {}
+
     mycsv["Student"].each_with_index do |student, index|
+      # split list of grades into an array
       grades_array = mycsv["Grades"][index].split(" ").map { |str| str.to_i }
+
       return_data[student] = grades_array
     end
+
     if !valid_data?(return_data)
       puts "Invalid data: #{file_name}"
       exit
     end
+
     return_data
+
   end
 
   def self.valid_file?(file_name)
@@ -64,6 +75,7 @@ end
 #############################################################################
 class Student
   attr_reader :first_name, :last_name
+
   def initialize(first_name, last_name, grades)
     @first_name = first_name
     @last_name = last_name
@@ -91,6 +103,10 @@ class Student
     @grades.max { |left, right| left <=> right }
   end
 
+  def grades
+    @grades.map { | grade | grade }
+  end
+
 end
 #############################################################################
 # an object that encapsulates the concept of the class' aggregate performance
@@ -111,13 +127,42 @@ class GradeSummary
       (students.max { |left, right| left.maximum <=> right.maximum }).maximum
     end
 
-    def standard_deviation(students)
+    def our_standard_deviation(students)
       return 0 if students.size == 0
+
       class_average = average_score(students)
+
       averages_squared = students.inject(0) do |sum, student|
         sum += (student.average_grade - class_average)**2
       end
       Math::sqrt(averages_squared / ( students.size - 1 ) )
+    end
+
+  # def deviation( class_average )
+
+  #   averages_squared = grades.inject(0) do |sum, grade|
+  #     sum += ( grade - class_average )**2
+  #   end
+
+  #   Math::sqrt(averages_squared / grades.size )
+
+  # end
+
+    def their_standard_deviation(students)
+      return 0 if students.size == 0
+
+      class_average = average_score(students)
+
+      all_grades = []
+      students.each do | student |
+        all_grades += student.grades
+      end
+
+    averages_squared = all_grades.inject(0) do | sum, grade |
+      sum += ( grade - class_average )**2
+    end
+
+    Math::sqrt( averages_squared / all_grades.size )
     end
 
   end
@@ -142,8 +187,13 @@ def teach_write(students, file_name)
 
 end
 
+#############################################################################
+# ENTRY POINT
+#############################################################################
+
 puts "What file do you want to read?"
-file_name = gets.chomp
+#file_name = gets.chomp
+file_name = 'grades.csv'
 
 student_grades = GradeReader.read_file(file_name)
 
@@ -183,5 +233,6 @@ teach_write(students, "report_card.csv")
 puts GradeSummary.average_score(students)
 puts GradeSummary.maximum_score(students)
 puts GradeSummary.minimum_score(students)
-puts GradeSummary.standard_deviation(students)
+puts GradeSummary.our_standard_deviation(students)
+puts GradeSummary.their_standard_deviation(students)
 
