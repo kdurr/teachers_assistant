@@ -30,6 +30,7 @@ class GradeReader
 
   end
 
+  private
   def self.valid_file?(file_name)
     return false if !File.exist?(file_name)
     File.extname(file_name) == ".csv"
