@@ -67,7 +67,7 @@ class Student
   def initialize(first_name, last_name, grades)
     @first_name = first_name
     @last_name = last_name
-    @grades = grades   
+    @grades = grades
   end
 
   def full_name
@@ -114,10 +114,10 @@ class GradeSummary
     def standard_deviation(students)
       return 0 if students.size == 0
       class_average = average_score(students)
-      averages_squared = students.inject(0) do |sum, student| 
+      averages_squared = students.inject(0) do |sum, student|
         sum += (student.average_grade - class_average)**2
       end
-      Math::sqrt(averages_squared / students.size)
+      Math::sqrt(averages_squared / ( students.size - 1 ) )
     end
 
   end
@@ -164,14 +164,14 @@ student_grades.each do |full_name, grades|
   students << Student.new(first_name, last_name, grades)
 end
 
-students.each do |student| 
+students.each do |student|
   puts "#{student.full_name}'s Average Grade is: #{student.average_grade}"
 end
 
 puts
 puts
 
-students.each do |student| 
+students.each do |student|
   puts "#{student.full_name}'s Average Grade is: #{student.letter_grade}"
 end
 
