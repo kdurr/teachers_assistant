@@ -138,15 +138,6 @@ class GradeSummary
       Math::sqrt(averages_squared / ( students.size - 1 ) )
     end
 
-  # def deviation( class_average )
-
-  #   averages_squared = grades.inject(0) do |sum, grade|
-  #     sum += ( grade - class_average )**2
-  #   end
-
-  #   Math::sqrt(averages_squared / grades.size )
-
-  # end
 
     def their_standard_deviation(students)
       return 0 if students.size == 0
@@ -230,9 +221,10 @@ puts
 
 teach_write(students, "report_card.csv")
 
-puts GradeSummary.average_score(students)
-puts GradeSummary.maximum_score(students)
-puts GradeSummary.minimum_score(students)
-puts GradeSummary.our_standard_deviation(students)
-puts GradeSummary.their_standard_deviation(students)
+puts "The average score across the class is          : #{GradeSummary.average_score(students)}"
+puts "The minimum score across the class is          :#{GradeSummary.maximum_score(students)}"
+puts "The maximum score across the class is          : #{GradeSummary.minimum_score(students)}"
+puts "One standard deviation across the class is     : #{GradeSummary.our_standard_deviation(students)}"
+puts "Another standard deviation across the class is : #{GradeSummary.their_standard_deviation(students)}"
+
 
